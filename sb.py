@@ -132,6 +132,14 @@ while True:
                                     client.sendAudio(receiver, 'temp2.mp3')
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
+                            elif 'cubot' in msg.text.lower():
+                                try:
+                                    apa = ['iya ada apa kak ?', 'ada yang bisa cubot bantu ?']
+                                    hasil = random.choice(apa)
+                                    client.sendText(msg.to, str(hasil))
+                                except Exception as e:
+                                    client.sendText(receiver, str(e))
+
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
                                 nama = [contact.mid for contact in group.members]
@@ -146,8 +154,9 @@ while True:
                                         nm2 += [nama[j]]
                                     client.mention(msg.to, nm2)
 
-                            elif text.lower() == 'set':
+                            elif text.lower() == ' cek sider':
                                 try:
+                                    client.sendText(msg.to,"Siap Laksanakan ..")
                                     del cctv['point'][msg.to]
                                     del cctv['sidermem'][msg.to]
                                     del cctv['cyduk'][msg.to]
