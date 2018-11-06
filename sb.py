@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 from linepy import *
-import json, time, random
+import json, time, random, urllib,requests,pytz,sys,os,codecs
 from gtts import gTTS
+from datetime import datetime
+
+
+settingsOpen = codecs.open("temp.json", "r", "utf-8")
+settings = json.load(settingsOpen)
+
+
 
 client = LineClient(id='ennopratama11@gmail.com', passwd='cahklaten11')
 #client = LineClient(authToken='AUTH TOKEN')
@@ -17,11 +24,64 @@ cctv={
     "point":{},
     "sidermem":{}
 }
+k1MID = client.getProfile().mid
+Bots = [k1MID]
+
+wait={
+    "autoJoin":True,
+    "autoAdd":True
+}
+
+
+def mentionMembers(to, mid):
+    try:
+        arrData = ""
+        textx = "Total Tag User「{}」\n\n  [ Tag ]\n1. ".format(str(len(mid)))
+        arr = []
+        no = 1
+        num = 2
+        for i in mid:
+            mention = "@x\n"
+            slen = str(len(textx))
+            elen = str(len(textx) + len(mention) - 1)
+            arrData = {'S': slen, 'E': elen, 'M': i}
+            arr.append(arrData)
+            textx += mention
+            if no < len(mid):
+                no += 1
+                textx += "%i. " % (num)
+                num = (num+1)
+            else:
+                try:
+                    no = "\n╚══[ {} ]".format(str(client.getGroup(to).name))
+                except:
+                    no = "\n╚══[ Success ]"
+        client.sendMessage(to, textx, {'MENTION': str('{"MENTIONEES":' + json.dumps(arr) + '}')}, 0)
+    except Exception as error:
+        client.sendMessage(to, "[ INFO ] Error :\n" + str(error))
 
 while True:
     try:
         ops=poll.singleTrace(count=50)
         for op in ops:
+            if op.type == 5:
+                if wait["autoAdd"] == True:
+            #if op.param3 in k4MID:
+                    client.findAndAddContactsByMid(op.param1)
+                    client.sendMessage(op.param1, "MAKASIH UDAH DI ADD YA :v")
+
+            if op.type == 13:
+                if k1MID in op.param3:
+                    if wait["autoJoin"] == True:
+                        client.acceptGroupInvitation(op.param1)
+            else:
+              try:
+                client.acceptGroupInvitation(op.param1)
+                client.sendMessage(op.param1, "=====||Auto Reply||=====\nAuto Join Off\nJangan Suka Ngundang² Njerr")
+                client.leaveGroup(op.param1)
+              except:
+                pass
+
             if op.type == 26:
                 msg = op.message
                 if msg.text != None:
@@ -37,6 +97,7 @@ while True:
                         pass
                 else:
                     pass
+
                 text = msg.text
                 msg_id = msg.id
                 receiver = msg.to
@@ -82,55 +143,16 @@ while True:
                                 group = client.getGroup(msg.to)
                                 nama = [contact.mid for contact in group.members]
                                 nm1, nm2, nm3, nm4, nm5, jml = [], [], [], [], [], len(nama)
-                                if jml <= 100:
+                                if jml <= 10:
                                     client.mention(msg.to, nama)
-                                if jml > 100 and jml < 200:
-                                    for i in range(0, 100):
+                                if jml > 10 and jml < 20:
+                                    for i in range (0, 9):
                                         nm1 += [nama[i]]
                                     client.mention(msg.to, nm1)
-                                    for j in range(101, len(nama)):
+                                    for j in range (10, len(nama)-1):
                                         nm2 += [nama[j]]
                                     client.mention(msg.to, nm2)
-                                if jml > 200 and jml < 300:
-                                    for i in range(0, 100):
-                                        nm1 += [nama[i]]
-                                    client.mention(msg.to, nm1)
-                                    for j in range(101, 200):
-                                        nm2 += [nama[j]]
-                                    client.mention(msg.to, nm2)
-                                    for k in range(201, len(nama)):
-                                        nm3 += [nama[k]]
-                                    client.mention(msg.to, nm3)
-                                if jml > 300 and jml < 400:
-                                    for i in range(0, 100):
-                                        nm1 += [nama[i]]
-                                    client.mention(msg.to, nm1)
-                                    for j in range(101, 200):
-                                        nm2 += [nama[j]]
-                                    client.mention(msg.to, nm2)
-                                    for k in range(201, len(nama)):
-                                        nm3 += [nama[k]]
-                                    client.mention(msg.to, nm3)
-                                    for l in range(301, len(nama)):
-                                        nm4 += [nama[l]]
-                                    client.mention(msg.to, nm4)
-                                if jml > 400 and jml < 501:
-                                    for i in range(0, 100):
-                                        nm1 += [nama[i]]
-                                    client.mention(msg.to, nm1)
-                                    for j in range(101, 200):
-                                        nm2 += [nama[j]]
-                                    client.mention(msg.to, nm2)
-                                    for k in range(201, len(nama)):
-                                        nm3 += [nama[k]]
-                                    client.mention(msg.to, nm3)
-                                    for l in range(301, len(nama)):
-                                        nm4 += [nama[l]]
-                                    client.mention(msg.to, nm4)
-                                    for m in range(401, len(nama)):
-                                        nm5 += [nama[m]]
-                                    client.mention(msg.to, nm5)             
-                                client.sendText(receiver, "Members :"+str(jml))
+
                             elif text.lower() == 'set':
                                 try:
                                     del cctv['point'][msg.to]
@@ -141,6 +163,7 @@ while True:
                                 cctv['point'][msg.to] = msg.id
                                 cctv['sidermem'][msg.to] = ""
                                 cctv['cyduk'][msg.to]=True
+                                
                             elif text.lower() == 'offread':
                                 if msg.to in cctv['point']:
                                     cctv['cyduk'][msg.to]=False
@@ -159,7 +182,7 @@ while True:
                                 pass
                             else:
                                 cctv['sidermem'][op.param1] += "\n~ " + Name
-                                pref=['eh ada','hai kak','aloo..','nah','lg ngapain','halo','sini kak']
+                                pref=['eh ada','hai kak','aloo..','nah','lg ngapain','sini kak']
                                 client.sendText(op.param1, str(random.choice(pref))+' '+Name)
                         else:
                             pass
