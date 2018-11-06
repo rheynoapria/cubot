@@ -73,14 +73,7 @@ while True:
                 if k1MID in op.param3:
                     if wait["autoJoin"] == True:
                         client.acceptGroupInvitation(op.param1)
-                        client.sendMessage(op.param1, "Hallo kakak kakak semua....")
-            else:
-              try:
-                client.acceptGroupInvitation(op.param1)
-                client.sendMessage(op.param1, "=====||Auto Reply||=====\nAuto Join Off\nJangan Suka Ngundang² Njerr")
-                client.leaveGroup(op.param1)
-              except:
-                pass
+                        client.sendMessage(op.param1, "Hallo kakak kakak semua.. \n Perkenalkan saya Cubot \n Terimakasih sudah diajak join ke grup nya :D")
 
             if op.type == 26:
                 msg = op.message
