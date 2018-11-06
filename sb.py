@@ -9,7 +9,6 @@ settingsOpen = codecs.open("temp.json", "r", "utf-8")
 settings = json.load(settingsOpen)
 
 
-
 client = LineClient(id='ennopratama11@gmail.com', passwd='cahklaten11')
 #client = LineClient(authToken='AUTH TOKEN')
 client.log("Auth Token : " + str(client.authToken))
@@ -74,6 +73,7 @@ while True:
                 if k1MID in op.param3:
                     if wait["autoJoin"] == True:
                         client.acceptGroupInvitation(op.param1)
+                        client.sendMessage(op.param1, "Hallo kakak kakak semua....")
             else:
               try:
                 client.acceptGroupInvitation(op.param1)
@@ -163,7 +163,7 @@ while True:
                                 cctv['point'][msg.to] = msg.id
                                 cctv['sidermem'][msg.to] = ""
                                 cctv['cyduk'][msg.to]=True
-                                
+
                             elif text.lower() == 'offread':
                                 if msg.to in cctv['point']:
                                     cctv['cyduk'][msg.to]=False
