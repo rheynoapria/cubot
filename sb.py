@@ -18,6 +18,11 @@ client.log("Channel Access Token : " + str(channel.channelAccessToken))
 
 poll = LinePoll(client)
 
+bisaApa="""Cubot bisa jawab pertanyaan kakak, bisa tau siapa yang baca chat line,
+bisa juga ngambil profile orang atau foto cover orang, cubot juga bisa ngetag semua
+member yang ada di grup ini :D
+"""
+
 cctv={
     "cyduk":{},
     "point":{},
@@ -123,6 +128,7 @@ while True:
                                     client.sendImageWithURL(receiver, a)
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
+
                             elif 'apakah ' in msg.text.lower():
                                 try:
                                     txt = ['iya', 'tidak', 'bisa jadi']
@@ -132,13 +138,25 @@ while True:
                                     client.sendAudio(receiver, 'temp2.mp3')
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
-                            elif 'cubot' in msg.text.lower():
+
+                            elif (text.lower() == 'cubot') or (text.lower() == 'eh cubot') or (text.lower() == 'oi cubot') or (text.lower() == 'woy cubot'):
                                 try:
                                     apa = ['iya ada apa kak ?', 'ada yang bisa cubot bantu ?']
                                     hasil = random.choice(apa)
                                     client.sendText(msg.to, str(hasil))
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
+                            
+                            elif text.lower() == 'terimakasih cubot':
+                                try:
+                                    tm = ['Sama sama kak', 'Terimakasih doang ? Gift tikel dong','Douitashimashite senpai ^_^']
+                                    rs = random.choice(tm)
+                                    client.sendText(msg.to, str(rs))
+                                except Exception as e:
+                                    client.sendText(receiver, str(e))
+
+                            elif (' cubot bisa apa ' in msg.text.lower()) or (' cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa ' in msg.text.lower()):
+                                client.sendMessage(msg.to,bisaApa)
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
@@ -154,7 +172,7 @@ while True:
                                         nm2 += [nama[j]]
                                     client.mention(msg.to, nm2)
 
-                            elif text.lower() == ' cek sider':
+                            elif ' cek sider' in msg.text.lower():
                                 try:
                                     client.sendText(msg.to,"Siap Laksanakan ..")
                                     del cctv['point'][msg.to]
@@ -184,7 +202,7 @@ while True:
                                 pass
                             else:
                                 cctv['sidermem'][op.param1] += "\n~ " + Name
-                                pref=['eh ada','hai kak','aloo..','nah','lg ngapain','sini kak']
+                                pref=['eh ada','hai kak','aloo..','nah']
                                 client.sendText(op.param1, str(random.choice(pref))+' '+Name)
                         else:
                             pass
