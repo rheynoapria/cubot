@@ -196,20 +196,55 @@ while True:
                             #                     client.kickoutFromGroup(msg.to,[msg.from_])
                             #                     break
                             
-                            elif msg.text.lower() in ["anjing","kimak","bangsat"]:
+                            elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
                                 ret_ = random.choice(balas)
                                 name = re.findall(r'@(\w+)', msg.text)
-                                mention = ast.literal_eval(msg.contentMetadata['MENTION'])
-                                mentionees = mention['MENTIONEES']
-                                for mention in mentionees:
-                                    if mention['M'] in Bots:
-                                        client.sendText(msg.to, ret_)
-                                        client.kickoutFromGroup(
-                                        msg.to, [sender])
-                                        break
+                                client.sendText(msg.to, ret_)
+                                client.kickoutFromGroup(msg.to, [sender])
+                            
+                            elif('bangsat' in msg.text.lower()) or (' bangsat' in msg.text.lower()) or ('bangsat ' in msg.text.lower()) or (' bangsat ' in msg.text.lower()):
+                                contact = client.getContact(sender)
+                                cName = contact.displayName
+                                balas = ["Kamu telah berkata kasar " +
+                                         cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                ret_ = random.choice(balas)
+                                name = re.findall(r'@(\w+)', msg.text)
+                                client.sendText(msg.to, ret_)
+                                client.kickoutFromGroup(msg.to, [sender])
+                            
+                            elif('tai' in msg.text.lower()) or (' tai' in msg.text.lower()) or ('tai ' in msg.text.lower()) or (' tai ' in msg.text.lower()):
+                                contact = client.getContact(sender)
+                                cName = contact.displayName
+                                balas = ["Kamu telah berkata kasar " +
+                                         cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                ret_ = random.choice(balas)
+                                name = re.findall(r'@(\w+)', msg.text)
+                                client.sendText(msg.to, ret_)
+                                client.kickoutFromGroup(msg.to, [sender])
+                            
+                            elif('kimak' in msg.text.lower()) or (' kimak' in msg.text.lower()) or ('kimak ' in msg.text.lower()) or (' kimak ' in msg.text.lower()):
+                                contact = client.getContact(sender)
+                                cName = contact.displayName
+                                balas = ["Kamu telah berkata kasar " +
+                                         cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                ret_ = random.choice(balas)
+                                name = re.findall(r'@(\w+)', msg.text)
+                                client.sendText(msg.to, ret_)
+                                client.kickoutFromGroup(msg.to, [sender])
+                            
+                            elif(' bangcat ' in msg.text.lower()) or (' tolol' in msg.text.lower()) or ('tolol ' in msg.text.lower()) or (' tolol ' in msg.text.lower()):
+                                contact = client.getContact(sender)
+                                cName = contact.displayName
+                                balas = ["Kamu telah berkata kasar " +
+                                         cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                ret_ = random.choice(balas)
+                                name = re.findall(r'@(\w+)', msg.text)
+                                client.sendText(msg.to, ret_)
+                                client.kickoutFromGroup(msg.to, [sender])
+                                        
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
