@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from linepy import *
-import json, time, random, urllib,requests,pytz,sys,os,codecs
+import json, time, random, urllib,requests,pytz,sys,os,codecs,re,ast
+from bs4 import BeautifulSoup
 from gtts import gTTS
+from threading import Thread
 from datetime import datetime
 
 
@@ -109,7 +111,7 @@ while True:
                                 client.sendMessage(receiver, None, contentMetadata={'mid': sender}, contentType=13)
                             elif text.lower() == 'speed':
                                 start = time.time()
-                                client.sendText(receiver, "TestSpeed")
+                                client.sendText(receiver, "Menghitung Kecepatan..")
                                 elapsed_time = time.time() - start
                                 client.sendText(receiver, "%sdetik" % (elapsed_time))
                             elif 'spic' in text.lower():
@@ -138,6 +140,14 @@ while True:
                                     client.sendAudio(receiver, 'temp2.mp3')
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
+                            
+                            elif 'kapan ' in msg.text.lower():
+                                rnd = ["kapan kapan","besok","satu abad lagi","Hari ini","Tahun depan","Minggu depan","Bulan depan","Sebentar lagi","Tidak Akan Pernah"]
+                                p = random.choice(rnd)
+                                lang = 'id'
+                                tts = gTTS(text=p, lang=lang,slow=False)
+                                tts.save("hasil.mp3")
+                                client.sendAudio(msg.to,"hasil.mp3")
 
                             elif (text.lower() == 'cubot') or (text.lower() == 'eh cubot') or (text.lower() == 'oi cubot') or (text.lower() == 'woy cubot'):
                                 try:
@@ -147,7 +157,7 @@ while True:
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
                             
-                            elif text.lower() == 'terimakasih cubot':
+                            elif ('terimakasih cubot' in msg.text.lower()) or (' terimakasih cubot' in msg.text.lower()) or ('makasih cubot ' in msg.text.lower()) or (' makasih cubot' in msg.text.lower()):
                                 try:
                                     tm = ['Sama sama kak', 'Terimakasih doang ? Gift tikel dong','Douitashimashite senpai ^_^']
                                     rs = random.choice(tm)
@@ -157,6 +167,15 @@ while True:
 
                             elif (' cubot bisa apa ' in msg.text.lower()) or (' cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa ' in msg.text.lower()):
                                 client.sendMessage(msg.to,bisaApa)
+
+                            elif " kick " in msg.text.lower():       
+                                if 'MENTION' in msg.contentMetadata.keys()!= None:
+                                    names = re.findall(r'@(\w+)', msg.text)
+                                    mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                                    mentionees = mention['MENTIONEES']
+                                    print mentionees
+                                    for mention in mentionees:
+                                        client.kickoutFromGroup(msg.to,[mention['M']])
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
