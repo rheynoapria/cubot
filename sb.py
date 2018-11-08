@@ -116,7 +116,7 @@ def bot(op):
                                     key = eval(msg.contentMetadata["MENTION"])
                                     u = key["MENTIONEES"][0]["M"]
                                     a = client.getContact(u).pictureStatus
-                                    client.sendImageWithURL(receiver, 'https://dl.profile.line.naver.jp/'+a)
+                                    client.sendImageWithURL(receiver, 'http://dl.profile.line.naver.jp/'+a)
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
                             elif 'scover' in text.lower():
