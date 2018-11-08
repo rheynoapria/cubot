@@ -7,6 +7,7 @@ from threading import Thread
 from datetime import datetime
 
 
+
 settingsOpen = codecs.open("temp.json", "r", "utf-8")
 settings = json.load(settingsOpen)
 
@@ -14,7 +15,6 @@ settings = json.load(settingsOpen)
 client = LineClient(id='ennopratama11@gmail.com', passwd='cahklaten11')
 #client = LineClient(authToken='AUTH TOKEN')
 client.log("Auth Token : " + str(client.authToken))
-
 channel = LineChannel(client)
 client.log("Channel Access Token : " + str(channel.channelAccessToken))
 
@@ -37,42 +37,36 @@ Bots = [mid]
 
 wait={
     "autoJoin":True,
-    "autoAdd":True,
-    "kickMention":True
+    "autoAdd":True
 }
 
 
-def mentionMembers(to, mid):
-    try:
-        arrData = ""
-        textx = "Total Tag User「{}」\n\n  [ Tag ]\n1. ".format(str(len(mid)))
-        arr = []
-        no = 1
-        num = 2
-        for i in mid:
-            mention = "@x\n"
-            slen = str(len(textx))
-            elen = str(len(textx) + len(mention) - 1)
-            arrData = {'S': slen, 'E': elen, 'M': i}
-            arr.append(arrData)
-            textx += mention
-            if no < len(mid):
-                no += 1
-                textx += "%i. " % (num)
-                num = (num+1)
-            else:
-                try:
-                    no = "\n╚══[ {} ]".format(str(client.getGroup(to).name))
-                except:
-                    no = "\n╚══[ Success ]"
-        client.sendMessage(to, textx, {'MENTION': str('{"MENTIONEES":' + json.dumps(arr) + '}')}, 0)
-    except Exception as error:
-        client.sendMessage(to, "[ INFO ] Error :\n" + str(error))
+def logError(text):
+    client.log("[ ERROR ] {}".format(str(text)))
+    tz = pytz.timezone("Asia/Makassar")
+    timeNow = datetime.now(tz=tz)
+    timeHours = datetime.strftime(timeNow, "(%H:%M)")
+    day = ["Sunday", "Monday", "Tuesday",
+           "Wednesday", "Thursday", "Friday", "Saturday"]
+    hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+    bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+             "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+    inihari = datetime.now(tz=tz)
+    hr = inihari.strftime('%A')
+    bln = inihari.strftime('%m')
+    for i in range(len(day)):
+        if hr == day[i]:
+            hasil = hari[i]
+    for k in range(0, len(bulan)):
+        if bln == str(k):
+            bln = bulan[k-1]
+    time = "{}, {} - {} - {} | {}".format(str(hasil), str(inihari.strftime('%d')), str(
+        bln), str(inihari.strftime('%Y')), str(inihari.strftime('%H:%M:%S')))
+    with open("errorLog.txt", "a") as error:
+        error.write("\n[{}] {}".format(str(time), text))
 
-while True:
-    try:
-        ops=poll.singleTrace(count=50)
-        for op in ops:
+def bot(op):
+        try :
             if op.type == 5:
                 if wait["autoAdd"] == True:
             #if op.param3 in k4MID:
@@ -180,31 +174,16 @@ while True:
                                     for mention in mentionees:
                                         client.kickoutFromGroup(msg.to,[mention['M']])
                             
-
-                            # elif 'MENTION' in msg.contentMetadata.keys() != None:
-                            #     if wait["kickMention"] == True:
-                            #         contact = client.getContact(msg.from_)
-                            #         cName = contact.displayName
-                            #         balas = ["Aku Bilang Jangan Ngetag Lagi " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
-                            #         ret_ = random.choice(balas)                     
-                            #         name = re.findall(r'@(\w+)', msg.text)
-                            #         mention = ast.literal_eval(msg.contentMetadata['MENTION'])
-                            #         mentionees = mention['MENTIONEES']
-                            #         for mention in mentionees:
-                            #             if mention['M'] in Bots:
-                            #                     client.sendText(msg.to,ret_)
-                            #                     client.kickoutFromGroup(msg.to,[msg.from_])
-                            #                     break
-                            
                             elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
-                                balas = ["Kamu telah berkata kasar " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                balas = ["Kamu telah berkata kasar " +
+                                         cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
                                 ret_ = random.choice(balas)
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
-                            
+
                             elif('bangsat' in msg.text.lower()) or (' bangsat' in msg.text.lower()) or ('bangsat ' in msg.text.lower()) or (' bangsat ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
@@ -214,7 +193,7 @@ while True:
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
-                            
+
                             elif('tai' in msg.text.lower()) or (' tai' in msg.text.lower()) or ('tai ' in msg.text.lower()) or (' tai ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
@@ -224,7 +203,7 @@ while True:
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
-                            
+
                             elif('kimak' in msg.text.lower()) or (' kimak' in msg.text.lower()) or ('kimak ' in msg.text.lower()) or (' kimak ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
@@ -234,7 +213,7 @@ while True:
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
-                            
+
                             elif(' bangcat ' in msg.text.lower()) or (' tolol' in msg.text.lower()) or ('tolol ' in msg.text.lower()) or (' tolol ' in msg.text.lower()):
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
@@ -244,7 +223,21 @@ while True:
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
-                                        
+
+                            elif 'MENTION' in msg.contentMetadata.keys() != None:
+                                if wait["kickMention"] == True:
+                                    contact = client.getContact(msg.from_)
+                                    cName = contact.displayName
+                                    balas = ["Aku Bilang Jangan Ngetag Lagi " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                    ret_ = random.choice(balas)                     
+                                    name = re.findall(r'@(\w+)', msg.text)
+                                    mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                                    mentionees = mention['MENTIONEES']
+                                    for mention in mentionees:
+                                        if mention['M'] in Bots:
+                                                client.sendText(msg.to,ret_)
+                                                client.kickoutFromGroup(msg.to,[msg.from_])
+                                                break
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
@@ -302,8 +295,19 @@ while True:
             else:
                 pass
 
-            # Don't remove this line, if you wan't get error soon!
-            poll.setRevision(op.revision)
+        except Exception as error:
+		    logError(error)    # Don't remove this line, if you wan't get error soon!
             
-    except Exception as e:
-        client.log("[SINGLE_TRACE] ERROR : " + str(e))
+def run():
+    	while True:
+            ops = poll.singleTrace(count=50)
+            if ops != None:
+                for op in ops:
+                    try:
+                        bot(op)
+                    except Exception as error:
+                        logError(error)
+                    poll.setRevision(op.revision)
+
+if __name__ == "__main__":
+	run()
