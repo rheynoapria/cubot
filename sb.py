@@ -25,17 +25,20 @@ bisa juga ngambil profile orang atau foto cover orang, cubot juga bisa ngetag se
 member yang ada di grup ini :D
 """
 
+
+
 cctv={
     "cyduk":{},
     "point":{},
     "sidermem":{}
 }
-k1MID = client.getProfile().mid
-Bots = [k1MID]
+mid = client.getProfile().mid
+Bots = [mid]
 
 wait={
     "autoJoin":True,
-    "autoAdd":True
+    "autoAdd":True,
+    "kickMention":True
 }
 
 
@@ -77,7 +80,7 @@ while True:
                     client.sendMessage(op.param1, "MAKASIH UDAH DI ADD YA :v")
 
             if op.type == 13:
-                if k1MID in op.param3:
+                if mid in op.param3:
                     if wait["autoJoin"] == True:
                         client.acceptGroupInvitation(op.param1)
                         client.sendMessage(op.param1, "Hallo kakak kakak semua.. \n Perkenalkan saya Cubot \n Terimakasih sudah diajak join ke grup nya :D")
@@ -176,6 +179,37 @@ while True:
                                     print mentionees
                                     for mention in mentionees:
                                         client.kickoutFromGroup(msg.to,[mention['M']])
+                            
+
+                            # elif 'MENTION' in msg.contentMetadata.keys() != None:
+                            #     if wait["kickMention"] == True:
+                            #         contact = client.getContact(msg.from_)
+                            #         cName = contact.displayName
+                            #         balas = ["Aku Bilang Jangan Ngetag Lagi " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                            #         ret_ = random.choice(balas)                     
+                            #         name = re.findall(r'@(\w+)', msg.text)
+                            #         mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                            #         mentionees = mention['MENTIONEES']
+                            #         for mention in mentionees:
+                            #             if mention['M'] in Bots:
+                            #                     client.sendText(msg.to,ret_)
+                            #                     client.kickoutFromGroup(msg.to,[msg.from_])
+                            #                     break
+                            
+                            elif msg.text.lower() in ["anjing","kimak","bangsat"]:
+                                contact = client.getContact(msg.from_)
+                                cName = contact.displayName
+                                balas = ["Kamu telah berkata kasar " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                                ret_ = random.choice(balas)
+                                name = re.findall(r'@(\w+)', msg.text)
+                                mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                                mentionees = mention['MENTIONEES']
+                                for mention in mentionees:
+                                    if mention['M'] in Bots:
+                                        client.sendText(msg.to, ret_)
+                                        client.kickoutFromGroup(
+                                        msg.to, [msg.from_])
+                                        break
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
