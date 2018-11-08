@@ -208,7 +208,7 @@ while True:
                                     if mention['M'] in Bots:
                                         client.sendText(msg.to, ret_)
                                         client.kickoutFromGroup(
-                                        msg.to, [msg.from_])
+                                        msg.to, [sender])
                                         break
 
                             elif text.lower() == 'tagall':
