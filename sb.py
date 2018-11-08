@@ -197,7 +197,7 @@ while True:
                             #                     break
                             
                             elif msg.text.lower() in ["anjing","kimak","bangsat"]:
-                                contact = client.getContact(msg.from_)
+                                contact = client.getContact(sender)
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
                                 ret_ = random.choice(balas)
