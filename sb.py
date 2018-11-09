@@ -41,6 +41,11 @@ wait={
 }
 
 
+
+admin = 'u2eff00efff34f390bb83735c1de0eeea'
+
+
+
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
     tz = pytz.timezone("Asia/Makassar")
@@ -105,13 +110,15 @@ def bot(op):
                             client.sendChatChecked(receiver, msg_id)
                             contact = client.getContact(sender)
                             if text.lower() == 'me':
+                                a = client.getContact(sender).mid
                                 client.sendMessage(receiver, None, contentMetadata={'mid': sender}, contentType=13)
+                                print(a)
                             elif text.lower() == 'speed':
                                 start = time.time()
                                 client.sendText(receiver, "Menghitung Kecepatan..")
                                 elapsed_time = time.time() - start
                                 client.sendText(receiver, "%sdetik" % (elapsed_time))
-                            elif 'spic' in text.lower():
+                            elif 'steal picture ' in text.lower():
                                 try:
                                     key = eval(msg.contentMetadata["MENTION"])
                                     u = key["MENTIONEES"][0]["M"]
@@ -119,7 +126,7 @@ def bot(op):
                                     client.sendImageWithURL(receiver, 'http://dl.profile.line.naver.jp/'+a)
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
-                            elif 'scover' in text.lower():
+                            elif 'steal cover ' in text.lower():
                                 try:
                                     key = eval(msg.contentMetadata["MENTION"])
                                     u = key["MENTIONEES"][0]["M"]
@@ -165,14 +172,20 @@ def bot(op):
                             elif (' cubot bisa apa ' in msg.text.lower()) or (' cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa ' in msg.text.lower()):
                                 client.sendMessage(msg.to,bisaApa)
 
-                            elif " kick " in msg.text.lower():       
+                            elif (" kick " in msg.text.lower()) or ("kick " in msg.text.lower()):
+                                person = eval(msg.contentMetadata['MENTION'])
+                                u = person["MENTIONEES"][0]["M"] 
                                 if 'MENTION' in msg.contentMetadata.keys()!= None:
-                                    names = re.findall(r'@(\w+)', msg.text)
-                                    mention = ast.literal_eval(msg.contentMetadata['MENTION'])
-                                    mentionees = mention['MENTIONEES']
-                                    print mentionees
-                                    for mention in mentionees:
-                                        client.kickoutFromGroup(msg.to,[mention['M']])
+                                    if admin == u:
+                                        client.sendMessage(msg.to,"Maaf aku gabisa ngekick dia.. ")
+                                    else :
+                                        names = re.findall(r'@(\w+)', msg.text)
+                                        mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                                        mentionees = mention['MENTIONEES']
+                                        print mentionees
+                                        client.sendMessage(msg.to, "Maaf ya kak , Aku Terpaksa..")
+                                        for mention in mentionees:
+                                            client.kickoutFromGroup(msg.to,[mention['M']])
                             
                             elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
                                 contact = client.getContact(sender)
@@ -214,7 +227,7 @@ def bot(op):
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
 
-                            elif(' bangcat ' in msg.text.lower()) or (' tolol' in msg.text.lower()) or ('tolol ' in msg.text.lower()) or (' tolol ' in msg.text.lower()):
+                            elif(' bangcat ' in msg.text.lower()) or (' tolol' in msg.text.lower()) or ('tolol ' in msg.text.lower()) or (' tolol ' in msg.text.lower()) or (' bangcat' in msg.text.lower()) or ('bangcat ' in msg.text.lower()) :
                                 contact = client.getContact(sender)
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
@@ -224,20 +237,20 @@ def bot(op):
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
 
-                            elif 'MENTION' in msg.contentMetadata.keys() != None:
-                                if wait["kickMention"] == True:
-                                    contact = client.getContact(msg.from_)
-                                    cName = contact.displayName
-                                    balas = ["Aku Bilang Jangan Ngetag Lagi " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
-                                    ret_ = random.choice(balas)                     
-                                    name = re.findall(r'@(\w+)', msg.text)
-                                    mention = ast.literal_eval(msg.contentMetadata['MENTION'])
-                                    mentionees = mention['MENTIONEES']
-                                    for mention in mentionees:
-                                        if mention['M'] in Bots:
-                                                client.sendText(msg.to,ret_)
-                                                client.kickoutFromGroup(msg.to,[msg.from_])
-                                                break
+                            # elif 'MENTION' in msg.contentMetadata.keys() != None:
+                            #     if wait["kickMention"] == True:
+                            #         contact = client.getContact(msg.from_)
+                            #         cName = contact.displayName
+                            #         balas = ["Aku Bilang Jangan Ngetag Lagi " + cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
+                            #         ret_ = random.choice(balas)                     
+                            #         name = re.findall(r'@(\w+)', msg.text)
+                            #         mention = ast.literal_eval(msg.contentMetadata['MENTION'])
+                            #         mentionees = mention['MENTIONEES']
+                            #         for mention in mentionees:
+                            #             if mention['M'] in Bots:
+                            #                     client.sendText(msg.to,ret_)
+                            #                     client.kickoutFromGroup(msg.to,[msg.from_])
+                            #                     break
 
                             elif text.lower() == 'tagall':
                                 group = client.getGroup(msg.to)
@@ -253,7 +266,7 @@ def bot(op):
                                         nm2 += [nama[j]]
                                     client.mention(msg.to, nm2)
 
-                            elif ' cek sider' in msg.text.lower():
+                            elif ("  cek sider" in msg.text.lower()) or (" cek sider " in msg.text.lower()) or ("cek sider" in msg.text.lower()):
                                 try:
                                     client.sendText(msg.to,"Siap Laksanakan ..")
                                     del cctv['point'][msg.to]
