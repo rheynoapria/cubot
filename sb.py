@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from linepy import *
-import json, time, random, urllib,requests,pytz,sys,os,codecs,re,ast
+from akad.ttypes import *
+import json, time, random, urllib,requests,pytz,sys,os,codecs,re,ast,thrift,pafy
+import six.moves.urllib as urllibb
 from bs4 import BeautifulSoup
 from gtts import gTTS
 from threading import Thread
@@ -26,6 +28,7 @@ member yang ada di grup ini :D
 """
 
 
+korban=[]
 
 cctv={
     "cyduk":{},
@@ -135,6 +138,7 @@ def bot(op):
                                 except Exception as e:
                                     client.sendText(receiver, str(e))
 
+
                             elif 'apakah ' in msg.text.lower():
                                 try:
                                     txt = ['iya', 'tidak', 'bisa jadi']
@@ -172,7 +176,12 @@ def bot(op):
                             elif (' cubot bisa apa ' in msg.text.lower()) or (' cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa' in msg.text.lower()) or ('cubot bisa apa ' in msg.text.lower()):
                                 client.sendMessage(msg.to,bisaApa)
 
+                            elif (" reinvite " in msg.text.lower()) or ("reinvite" in msg.text.lower()):
+                                if op.param1 in msg.to:
+                                    client.inviteIntoGroup(op.param1,korban[0])
+
                             elif (" kick " in msg.text.lower()) or ("kick " in msg.text.lower()):
+                                
                                 person = eval(msg.contentMetadata['MENTION'])
                                 u = person["MENTIONEES"][0]["M"] 
                                 if 'MENTION' in msg.contentMetadata.keys()!= None:
@@ -182,10 +191,11 @@ def bot(op):
                                         names = re.findall(r'@(\w+)', msg.text)
                                         mention = ast.literal_eval(msg.contentMetadata['MENTION'])
                                         mentionees = mention['MENTIONEES']
-                                        print mentionees
                                         client.sendMessage(msg.to, "Maaf ya kak , Aku Terpaksa..")
                                         for mention in mentionees:
                                             client.kickoutFromGroup(msg.to,[mention['M']])
+                                        korban.append(u)
+                                        print (korban)
                             
                             elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
                                 contact = client.getContact(sender)
@@ -309,7 +319,7 @@ def bot(op):
                 pass
 
         except Exception as error:
-		    logError(error)    # Don't remove this line, if you wan't get error soon!
+            logError(error)
             
 def run():
     	while True:
