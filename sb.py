@@ -125,7 +125,7 @@ def bot(op):
                             sendTime = waktu(sendTime)
                             pelaku = client.getContact(msg_dict[sender]["pelaku"])
                             nama = pelaku.displayName
-                            dia = "==========> Detect Pesan Terhapus"
+                            dia = "========> Detect Pesan Terhapus"
                             dia += "\n||---------------------------------------"
                             dia += "\n|| Pengirim : @! \n\n"
                             dia += "\n\n|| Kapan   : {} yang lalu".format(str(sendTime))
