@@ -57,27 +57,10 @@ admin = 'u2eff00efff34f390bb83735c1de0eeea'
 
 
 def waktu(secs):
-    mins, secs = divmod(secs,60)
-    hours, mins = divmod(mins,60)
-    days, hours = divmod(hours,24)
-    weeks, days = divmod(days,7)
-    months, weeks = divmod(weeks,4)
-    text = ""
-    if months != 0: 
-        text += "%02d Bulan" % (months)
-    if weeks != 0: 
-        text += " %02d Minggu" % (weeks)
-    if days != 0: 
-        text += " %02d Hari" % (days)
-    if hours !=  0: 
-        text +=  " %02d Jam" % (hours)
-    if mins != 0: 
-        text += " %02d Menit" % (mins)
-    if secs != 0: 
-        text += " %02d Detik" % (secs)
-    if text[0] == " ":
-		text = text[1:]
-    return text
+    mins, secs = divmod(secs, 60)
+    hours, mins = divmod(mins, 60)
+    days, hours = divmod(hours, 24)
+    return '%02d Hari %02d Jam %02d Menit %02d Detik' % (days, hours, mins, secs)
 
 
 def logError(text):
@@ -129,10 +112,9 @@ def bot(op):
                             pelaku = client.getContact(msg_dict[sender]["pelaku"])
                             nama = pelaku.displayName
                             dia  = "╔════➢ Detect Pesan Terhapus "
-                            dia += "\n╠ Pengirim : @!"+nama
-                            dia += "\n╠ Time : {} yang lalu".format(str(msg_dict[sender]["createdTime"]))
-                            dia += "\n╠ Text: {}".format(str(msg_dict[sender]["rider"]))
-                            dia += "\n╚════➢ Finish "
+                            dia += "\n╠ Pengirim : @!" + nama
+                            dia += "\n╠ Time  : {}".format(str(msg_dict[sender]["createdTime"]))
+                            dia += "\n╠ Pesan : {}".format(str(msg_dict[sender]["rider"]))
                             client.sendMention(to, dia,[pelaku.mid])
                     except:
                         client.sendMessage(to, "Return")
