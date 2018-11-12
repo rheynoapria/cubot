@@ -26,9 +26,10 @@ bisaApa="""Cubot bisa jawab pertanyaan kakak, bisa tau siapa yang baca chat line
 bisa juga ngambil profile orang atau foto cover orang, cubot juga bisa ngetag semua
 member yang ada di grup ini :D
 """
-
+mulai = time.time()
 
 korban=[]
+msg_dict = {}
 
 cctv={
     "cyduk":{},
@@ -40,13 +41,26 @@ Bots = [mid]
 
 wait={
     "autoJoin":True,
-    "autoAdd":True
+    "autoAdd":True,
+    "UnsendPesan":True
 }
 
 
 
 admin = 'u2eff00efff34f390bb83735c1de0eeea'
 
+
+# def restart_program():
+#     python = sys.executable
+#     os.execl(python, python, * sys.argv)
+#     client.sendText(receiver, 'Restarting Server Prosses..')
+
+
+def waktu(secs):
+    mins, secs = divmod(secs, 60)
+    hours, mins = divmod(mins, 60)
+    days, hours = divmod(hours, 24)
+    return '%02d Hari %02d Jam %02d Menit %02d Detik' % (days, hours, mins, secs)
 
 
 def logError(text):
@@ -73,11 +87,13 @@ def logError(text):
     with open("errorLog.txt", "a") as error:
         error.write("\n[{}] {}".format(str(time), text))
 
+
+
 def bot(op):
         try :
             if op.type == 5:
                 if wait["autoAdd"] == True:
-            #if op.param3 in k4MID:
+                    #if op.param3 in k4MID:
                     client.findAndAddContactsByMid(op.param1)
                     client.sendMessage(op.param1, "MAKASIH UDAH DI ADD YA :v")
 
@@ -86,6 +102,22 @@ def bot(op):
                     if wait["autoJoin"] == True:
                         client.acceptGroupInvitation(op.param1)
                         client.sendMessage(op.param1, "Hallo kakak kakak semua.. \n Perkenalkan saya Cubot \n Terimakasih sudah diajak join ke grup nya :D")
+
+            if op.type == 65:
+                if wait['UnsendPesan'] == True:
+                    try:
+                        to = op.param1
+                        sender = op.param2
+                        if sender in msg_dict:
+                            pelaku = client.getContact(msg_dict[sender]["pelaku"])
+                            nama = pelaku.displayName
+                            dia  = "Detect Pesan Terhapus\n"
+                            dia += "\n1. Name : @! " + nama
+                            dia += "\n2. Taken : {}".format(str(msg_dict[sender]["createdTime"]))
+                            dia += "\n3. Pesannya : {}".format(str(msg_dict[sender]["rider"]))
+                            client.sendMention(to, dia,[pelaku.mid])
+                    except:
+                        client.sendMessage(to, "Return")
 
             if op.type == 26:
                 msg = op.message
@@ -109,6 +141,9 @@ def bot(op):
                 sender = msg._from
                 try:
                     if msg.contentType == 0:
+                        if wait["UnsendPesan"] == True:
+                            msg_dict[msg_id] = {"rider": text, "pelaku": sender, "createdTime": msg.createdTime, "contentType": msg.contentType, "contentMetadata": msg.contentMetadata}
+
                         if msg.toType == 2:
                             client.sendChatChecked(receiver, msg_id)
                             contact = client.getContact(sender)
@@ -121,14 +156,67 @@ def bot(op):
                                 client.sendText(receiver, "Menghitung Kecepatan..")
                                 elapsed_time = time.time() - start
                                 client.sendText(receiver, "%sdetik" % (elapsed_time))
-                            elif 'steal picture ' in text.lower():
-                                try:
-                                    key = eval(msg.contentMetadata["MENTION"])
-                                    u = key["MENTIONEES"][0]["M"]
-                                    a = client.getContact(u).pictureStatus
-                                    client.sendImageWithURL(receiver, 'http://dl.profile.line.naver.jp/'+a)
-                                except Exception as e:
-                                    client.sendText(receiver, str(e))
+                            
+                            elif text.lower().startswith("runtime"):
+                                if sender in admin:
+                                    eltime = time.time() - mulai                                
+                                    opn = " "+waktu(eltime)
+                                    client.sendText(receiver,"Bot Telah Aktif Selama\n" + opn)
+
+                            elif text.lower().startswith("restart bot"):
+                                if sender in admin:
+                                    client.sendText(receiver, 'Restarting Server Prosses..')
+                                    print ("Restarting Server")
+                                    python = sys.executable
+                                    os.execl(python, python, * sys.argv)
+                                    client.sendText(receiver, 'Bot telah aktif..')
+                            elif text.lower().startswith("grup info"):
+                                if sender in admin:
+                                    group = client.getGroup(receiver)
+                                    try:
+                                        gCreator = group.creator.displayName
+                                    except:
+                                        gCreator = "Tidak ditemukan"
+                                    if group.invitee is None:
+                                        gPending = "0"
+                                    else:
+                                        gPending = str(len(group.invitee))
+                                
+                                    cuki = "INFO GRUP"
+                                    cuki += "\nNama Group : {}".format(str(group.name))
+                                    cuki += "\nID Group :\n? {}".format(group.id)
+                                    cuki += "\nPembuat : {}".format(str(gCreator))
+                                    cuki += "\nJumlah Member : {}".format(str(len(group.members)))
+                                    cuki += "\nJumlah Pending : {}".format(gPending)
+                                    client.sendMessage(receiver, str(cuki))
+                            # elif 'steal picture ' in text.lower():
+                            #     try:
+                            #         key = eval(msg.contentMetadata["MENTION"])
+                            #         u = key["MENTIONEES"][0]["M"]
+                            #         a = client.getContact(u).pictureStatus
+                            #         client.sendImageWithURL(receiver, 'http://dl.profile.line.naver.jp/'+a)
+                            #     except Exception as e:
+                            #         client.sendText(receiver, str(e))
+
+                            elif "Pp @" in msg.text:
+                                if msg.toType == 2:
+                                    cover = msg.text.replace("Pp @","")
+                                    _nametarget = cover.rstrip('  ')
+                                    gs = client.getGroup(msg.to)
+                                    targets = []
+                                    for g in gs.members:
+                                        if _nametarget == g.displayName:
+                                            targets.append(g.mid)
+                                    if targets == []:
+                                        client.sendText(msg.to,"Not found")
+                                    else:
+                                        for target in targets:
+                                            try:
+                                                h = client.getContact(target)
+                                                client.sendImageWithURL(msg.to,"http://dl.profile.line-cdn.net/" + h.pictureStatus)
+                                            except Exception as error:
+                                                print error
+                                                client.sendText(msg.to,"Upload image failed.")
                             elif 'steal cover ' in text.lower():
                                 try:
                                     key = eval(msg.contentMetadata["MENTION"])
@@ -141,7 +229,8 @@ def bot(op):
 
                             elif 'apakah ' in msg.text.lower():
                                 try:
-                                    txt = ['iya', 'tidak', 'bisa jadi']
+                                    txt = [
+                                        'iya', 'tidak', 'bisa jadi', 'mungkin saja', 'tidak mungkin', 'au ah gelap']
                                     isi = random.choice(txt)
                                     tts = gTTS(text=isi, lang='id', slow=False)
                                     tts.save('temp2.mp3')
@@ -157,7 +246,7 @@ def bot(op):
                                 tts.save("hasil.mp3")
                                 client.sendAudio(msg.to,"hasil.mp3")
 
-                            elif (text.lower() == 'cubot') or (text.lower() == 'eh cubot') or (text.lower() == 'oi cubot') or (text.lower() == 'woy cubot'):
+                            elif (text.lower() == 'cubot') or (text.lower() == ' cubot'):
                                 try:
                                     apa = ['iya ada apa kak ?', 'ada yang bisa cubot bantu ?']
                                     hasil = random.choice(apa)
@@ -177,8 +266,25 @@ def bot(op):
                                 client.sendMessage(msg.to,bisaApa)
 
                             elif (" reinvite " in msg.text.lower()) or ("reinvite" in msg.text.lower()):
-                                if op.param1 in msg.to:
-                                    client.inviteIntoGroup(op.param1,korban[0])
+                                ginfo = client.getGroup(msg.to)
+                                for target in korban:
+                                    try:
+                                        client.findAndAddContactsByMid(target)
+                                        client.inviteIntoGroup(msg.to,[target])
+                                        client.sendText(msg.to, "Invite SUCCESS..")
+                                        del korban[:]
+                                        break
+                                    except:
+                                        client.sendText(msg.to, 'Contact error')
+                                        break
+                                    
+                            
+                            elif "korban" in msg.text.lower():
+                                if korban.__len__() > 0 :
+                                    for i in korban:
+                                        client.sendMessage(msg.to, None, contentMetadata={'mid': i}, contentType=13)
+                                else :
+                                    client.sendMessage(msg.to,"Belom ada yang ke kick")
 
                             elif (" kick " in msg.text.lower()) or ("kick " in msg.text.lower()):
                                 
@@ -199,6 +305,7 @@ def bot(op):
                             
                             elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
                                 contact = client.getContact(sender)
+                                a = client.getContact(sender).mid
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
                                          cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
@@ -206,9 +313,11 @@ def bot(op):
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
+                                korban.append(a)
 
                             elif('bangsat' in msg.text.lower()) or (' bangsat' in msg.text.lower()) or ('bangsat ' in msg.text.lower()) or (' bangsat ' in msg.text.lower()):
                                 contact = client.getContact(sender)
+                                a = client.getContact(sender).mid
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
                                          cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
@@ -216,9 +325,11 @@ def bot(op):
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
+                                korban.append(a)
 
                             elif('tai' in msg.text.lower()) or (' tai' in msg.text.lower()) or ('tai ' in msg.text.lower()) or (' tai ' in msg.text.lower()):
                                 contact = client.getContact(sender)
+                                a = client.getContact(sender).mid
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
                                          cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
@@ -226,9 +337,11 @@ def bot(op):
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
+                                korban.append(a)
 
                             elif('kimak' in msg.text.lower()) or (' kimak' in msg.text.lower()) or ('kimak ' in msg.text.lower()) or (' kimak ' in msg.text.lower()):
                                 contact = client.getContact(sender)
+                                a = client.getContact(sender).mid
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
                                          cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
@@ -236,9 +349,11 @@ def bot(op):
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
+                                korban.append(a)
 
                             elif(' bangcat ' in msg.text.lower()) or (' tolol' in msg.text.lower()) or ('tolol ' in msg.text.lower()) or (' tolol ' in msg.text.lower()) or (' bangcat' in msg.text.lower()) or ('bangcat ' in msg.text.lower()) :
                                 contact = client.getContact(sender)
+                                a = client.getContact(sender).mid
                                 cName = contact.displayName
                                 balas = ["Kamu telah berkata kasar " +
                                          cName + "\nAku Kick Kamu! Sorry, Byee!!!"]
@@ -246,6 +361,9 @@ def bot(op):
                                 name = re.findall(r'@(\w+)', msg.text)
                                 client.sendText(msg.to, ret_)
                                 client.kickoutFromGroup(msg.to, [sender])
+                                korban.append(a)
+                                
+                                
 
                             # elif 'MENTION' in msg.contentMetadata.keys() != None:
                             #     if wait["kickMention"] == True:
@@ -317,6 +435,8 @@ def bot(op):
 
             else:
                 pass
+            
+            
 
         except Exception as error:
             logError(error)

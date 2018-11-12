@@ -74,6 +74,35 @@ class LineClient(LineApi, LineModels):
         msg.to = Tomid
         msg.text = text
         return self._client.sendMessage(0, msg)
+    
+    @loggedIn
+    def sendMention(self, to, text="", mids=[]):
+        arrData = ""
+        arr = []
+        mention = "@cubot "
+        if mids == []:
+            raise Exception("Invalid mids")
+        if "@!" in text:
+            if text.count("@!") != len(mids):
+                raise Exception("Invalid mids")
+            texts = text.split("@!")
+            textx = ""
+            for mid in mids:
+                textx += str(texts[mids.index(mid)])
+                slen = len(textx)
+                elen = len(textx) + 15
+                arrData = {'S':str(slen), 'E':str(elen - 4), 'M':mid}
+                arr.append(arrData)
+                textx += mention
+            textx += str(texts[len(mids)])
+        else:
+            textx = ""
+            slen = len(textx)
+            elen = len(textx) + 15
+            arrData = {'S':str(slen), 'E':str(elen - 4), 'M':mids[0]}
+            arr.append(arrData)
+            textx += mention + str(text)
+        return self.sendMessage(to, textx, {'MENTION': str('{"MENTIONEES":' + json.dumps(arr) + '}')}, 0)
 
     """User"""
     @loggedIn
@@ -168,6 +197,24 @@ class LineClient(LineApi, LineModels):
             'STKID': stickerId
         }
         return self.sendMessage(to, '', contentMetadata, 7)
+    
+    @loggedIn
+    def mentionWithRFU(self, to, mid, firstmessage, mids=[]):
+        try:
+            arrData = ""
+            text = "%s " %(str(firstmessage))
+            arr = []
+            mention = "@Cubot"
+            if mids == []:
+                raise Exception("Invalid mids")
+            slen = str(len(text))
+            elen = str(len(text) + len(mention) - 1)
+            arrData = {'S':slen, 'E':elen, 'M':mid}
+            arr.append(arrData)
+            text += mention + str(lastmessage)
+            self.sendMessage(to,text, {'MENTION': str('{"MENTIONEES":' + json.dumps(arr) + '}')}, 0)
+        except Exception as error:
+            print(error)
         
     @loggedIn
     def sendContact(self, to, mid):

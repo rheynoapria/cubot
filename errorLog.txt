@@ -1,0 +1,20 @@
+
+[Minggu, 11 - November - 2018 | 15:37:50] 
+[Minggu, 11 - November - 2018 | 15:37:51] 
+[Minggu, 11 - November - 2018 | 16:12:18] TalkException(parameterMap=None, reason=u'LOG_OUT', code=8)
+[Senin, 12 - November - 2018 | 23:05:57] 'NoneType' object has no attribute 'id'
+[Senin, 12 - November - 2018 | 23:31:39] 'NoneType' object has no attribute 'id'
+[Senin, 12 - November - 2018 | 23:32:14] 'NoneType' object has no attribute 'id'
+[Senin, 12 - November - 2018 | 23:34:17] 'NoneType' object has no attribute 'id'
+[Senin, 12 - November - 2018 | 23:35:30] 'NoneType' object has no attribute 'id'
+[Selasa, 13 - November - 2018 | 00:19:10] local variable 'receiver' referenced before assignment
+[Selasa, 13 - November - 2018 | 00:20:39] local variable 'you' referenced before assignment
+[Selasa, 13 - November - 2018 | 00:22:35] 'NoneType' object has no attribute 'to'
+[Selasa, 13 - November - 2018 | 00:35:51] 'NoneType' object has no attribute 'id'
+[Selasa, 13 - November - 2018 | 00:38:01] local variable 'you' referenced before assignment
+[Selasa, 13 - November - 2018 | 01:31:02] 'detectUnsend'
+[Selasa, 13 - November - 2018 | 01:39:03] 
+[Selasa, 13 - November - 2018 | 01:48:42] 
+[Selasa, 13 - November - 2018 | 01:49:23] 
+[Selasa, 13 - November - 2018 | 01:49:37] 
+[Selasa, 13 - November - 2018 | 01:52:17] 

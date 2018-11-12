@@ -27,12 +27,21 @@ class LineServer(object):
     }
 
     USER_AGENT  = 'Line/7.18.1'
-    APP_TYPE    = ApplicationType.IOS
+    APP_TYPE    = ApplicationType.DESKTOPMAC
     APP_NAME    = 'IOSIPAD\t7.18.1\tiPhone OS\t11.2.5'
     CARRIER     = '51089, 1-0'
-    SYSTEM_NAME = 'FDLRCN'
+    SYSTEM_NAME = 'CUBOT'
     IP_ADDR     = '8.8.8.8'
     EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+    # APP_TYPE = ApplicationType.CHROMEOS
+    # APP_NAME = 'CHROMEOS\t2.1.5\tChrome_OS\t1'
+    # APP_VER = '8.9.1'
+    # CARRIER = '51089, 1-0'
+    # SYSTEM_NAME = 'CUBOT'
+    # SYSTEM_VER = '12.1.1'
+    # IP_ADDR = '8.8.8.8'
+    # EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
     _session    = requests.session()
     channelHeaders  = {}
