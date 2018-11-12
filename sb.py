@@ -57,10 +57,21 @@ admin = 'u2eff00efff34f390bb83735c1de0eeea'
 
 
 def waktu(secs):
-    mins, secs = divmod(secs, 60)
-    hours, mins = divmod(mins, 60)
-    days, hours = divmod(hours, 24)
-    return '%02d Hari %02d Jam %02d Menit %02d Detik' % (days, hours, mins, secs)
+    mins, secs = divmod(secs,60)
+    hours, mins = divmod(mins,60)
+    days, hours = divmod(hours,24)
+    weeks, days = divmod(days,7)
+    months, weeks = divmod(weeks,4)
+    text = ""
+    if months != 0: text += "%02d Bulan" % (months)
+    if weeks != 0: text += " %02d Minggu" % (weeks)
+    if days != 0: text += " %02d Hari" % (days)
+    if hours !=  0: text +=  " %02d Jam" % (hours)
+    if mins != 0: text += " %02d Menit" % (mins)
+    if secs != 0: text += " %02d Detik" % (secs)
+    if text[0] == " ":
+		text = text[1:]
+    return text
 
 
 def logError(text):
@@ -109,12 +120,17 @@ def bot(op):
                         to = op.param1
                         sender = op.param2
                         if sender in msg_dict:
+                            unsendTime = time.time()
+                            sendTime = unsendTime - msg_dict[sender]["createdTime"]
+                            sendTime = waktu(sendTime)
                             pelaku = client.getContact(msg_dict[sender]["pelaku"])
                             nama = pelaku.displayName
-                            dia  = "╔════➢ Detect Pesan Terhapus "
-                            dia += "\n╠ Pengirim : @!" + nama
-                            dia += "\n╠ Time  : {}".format(str(msg_dict[sender]["createdTime"]))
-                            dia += "\n╠ Pesan : {}".format(str(msg_dict[sender]["rider"]))
+                            dia = "==========> Detect Pesan Terhapus"
+                            dia += "\n||---------------------------------------"
+                            dia += "\n|| Pengirim : @! \n\n"
+                            dia += "\n\n|| Kapan   : {} yang lalu".format(str(sendTime))
+                            dia += "\n|| Pesannya : {}".format(str(msg_dict[sender]["rider"]))
+                            dia += "\n||----------------------------------------"
                             client.sendMention(to, dia,[pelaku.mid])
                     except:
                         client.sendMessage(to, "Return")
@@ -142,7 +158,8 @@ def bot(op):
                 try:
                     if msg.contentType == 0:
                         if wait["UnsendPesan"] == True:
-                            msg_dict[msg_id] = {"rider": text, "pelaku": sender, "createdTime": msg.createdTime, "contentType": msg.contentType, "contentMetadata": msg.contentMetadata}
+                            unsendTime = time.time()
+                            msg_dict[msg_id] = {"rider": text, "pelaku": sender, "createdTime": unsendTime, "contentType": msg.contentType, "contentMetadata": msg.contentMetadata}
 
                         if msg.toType == 2:
                             client.sendChatChecked(receiver, msg_id)
