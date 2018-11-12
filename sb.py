@@ -126,14 +126,11 @@ def bot(op):
                         to = op.param1
                         sender = op.param2
                         if sender in msg_dict:
-                            unsendTime = time.time()
                             pelaku = client.getContact(msg_dict[sender]["pelaku"])
-                            sendTime = unsendTime - msg_dict[sender]["createdTime"]
-                            sendTime = waktu(sendTime)
                             nama = pelaku.displayName
                             dia  = "╔════➢ Detect Pesan Terhapus "
                             dia += "\n╠ Pengirim : @!"
-                            dia += "\n╠ Time : {} yang lalu".format(sendTime)
+                            dia += "\n╠ Time : {} yang lalu".format(str(msg_dict[sender]["createdTime"]))
                             dia += "\n╠ Text: {}".format(str(msg_dict[sender]["rider"]))
                             dia += "\n╚════➢ Finish "
                             client.sendMention(to, dia,[pelaku.mid])
