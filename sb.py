@@ -129,7 +129,7 @@ def bot(op):
                             pelaku = client.getContact(msg_dict[sender]["pelaku"])
                             nama = pelaku.displayName
                             dia  = "╔════➢ Detect Pesan Terhapus "
-                            dia += "\n╠ Pengirim : @!"
+                            dia += "\n╠ Pengirim : @!"+nama
                             dia += "\n╠ Time : {} yang lalu".format(str(msg_dict[sender]["createdTime"]))
                             dia += "\n╠ Text: {}".format(str(msg_dict[sender]["rider"]))
                             dia += "\n╚════➢ Finish "
@@ -160,8 +160,7 @@ def bot(op):
                 try:
                     if msg.contentType == 0:
                         if wait["UnsendPesan"] == True:
-                            unsendTime = time.time()
-                            msg_dict[msg_id] = {"rider": text, "pelaku": sender, "createdTime": unsendTime, "contentType": msg.contentType, "contentMetadata": msg.contentMetadata}
+                            msg_dict[msg_id] = {"rider": text, "pelaku": sender, "createdTime": msg.createdTime, "contentType": msg.contentType, "contentMetadata": msg.contentMetadata}
 
                         if msg.toType == 2:
                             client.sendChatChecked(receiver, msg_id)
