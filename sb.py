@@ -293,10 +293,10 @@ def bot(op):
                                     del korban[:]
                                 except:
                                     client.sendText(msg.to, 'Contact error')
-                            
+                            sender
                             elif "invite " in msg.text:
-                                if msg.from_ in admin:
-                                    midd = msg.text.replace("Invite ","")
+                                if sender in admin:
+                                    midd = msg.text.replace("invite ","")
                                     client.findAndAddContactsByMid(midd)
                                     client.inviteIntoGroup(msg.to,[midd])
                                         
