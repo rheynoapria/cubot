@@ -286,10 +286,12 @@ def bot(op):
                                 ginfo = client.getGroup(msg.to)
                                 try:
                                     for i in range(len(korban)):
+                                        contact = client.getContact(korban[i])
+                                        cName = contact.displayName
                                         client.findAndAddContactsByMid(korban[i])
                                         client.inviteIntoGroup(msg.to,[korban[i]])
+                                        client.sendText(msg.to, "Invite"+ cName + "success..")
                                         break
-                                    client.sendText(msg.to, "Invite success..")
                                     del korban[:]
                                 except:
                                     client.sendText(msg.to, 'Contact error')
