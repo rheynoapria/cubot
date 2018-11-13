@@ -291,7 +291,7 @@ def bot(op):
                                             cName = contact.displayName
                                             client.findAndAddContactsByMid(korban[i])
                                             client.inviteIntoGroup(msg.to,[korban[i]])
-                                            client.sendText(msg.to, "Invite"+ cName + "success..")
+                                            client.sendText(msg.to, "Invite "+ cName + " success..")
                                             break
                                         del korban[:]
                                     else :
