@@ -287,18 +287,18 @@ def bot(op):
                                 try:
                                     for i in range(len(korban)):
                                         client.findAndAddContactsByMid(korban[i])
-                                        client.inviteIntoGroup(msg.to,korban[i])
+                                        client.inviteIntoGroup(msg.to,[korban[i]])
                                         break
                                     client.sendText(msg.to, "Invite success..")
                                     del korban[:]
                                 except:
                                     client.sendText(msg.to, 'Contact error')
-                            sender
-                            elif "invite " in msg.text:
-                                if sender in admin:
-                                    midd = msg.text.replace("invite ","")
-                                    client.findAndAddContactsByMid(midd)
-                                    client.inviteIntoGroup(msg.to,[midd])
+                           
+                            # elif "invite " in msg.text:
+                            #     if sender in admin:
+                            #         midd = msg.text.replace("Invite ","")
+                            #         client.findAndAddContactsByMid(midd)
+                            #         client.inviteIntoGroup(msg.to,[midd])
                                         
                             
                             elif "korban" in msg.text.lower():
