@@ -293,7 +293,13 @@ def bot(op):
                                     del korban[:]
                                 except:
                                     client.sendText(msg.to, 'Contact error')
-                                    
+                            
+                            elif "invite " in msg.text:
+                                if msg.from_ in admin:
+                                    midd = msg.text.replace("Invite ","")
+                                    client.findAndAddContactsByMid(midd)
+                                    client.inviteIntoGroup(msg.to,[midd])
+                                        
                             
                             elif "korban" in msg.text.lower():
                                 if korban.__len__() > 0 :
@@ -316,7 +322,7 @@ def bot(op):
                                         client.sendMessage(msg.to, "Maaf ya kak , Aku Terpaksa..")
                                         for mention in mentionees:
                                             client.kickoutFromGroup(msg.to,[mention['M']])
-                                        korban.append(u)
+                                            korban.append(u)
                                         print (korban)
                             
                             elif ('anjing' in msg.text.lower()) or (' anjing' in msg.text.lower()) or ('anjing ' in msg.text.lower()) or (' anjing ' in msg.text.lower()):
