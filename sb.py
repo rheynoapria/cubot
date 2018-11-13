@@ -285,14 +285,17 @@ def bot(op):
                             elif (" reinvite " in msg.text.lower()) or ("reinvite" in msg.text.lower()):
                                 ginfo = client.getGroup(msg.to)
                                 try:
-                                    for i in range(len(korban)):
-                                        contact = client.getContact(korban[i])
-                                        cName = contact.displayName
-                                        client.findAndAddContactsByMid(korban[i])
-                                        client.inviteIntoGroup(msg.to,[korban[i]])
-                                        client.sendText(msg.to, "Invite"+ cName + "success..")
-                                        break
-                                    del korban[:]
+                                    if korban.__len__() > 0:
+                                        for i in range(len(korban)):
+                                            contact = client.getContact(korban[i])
+                                            cName = contact.displayName
+                                            client.findAndAddContactsByMid(korban[i])
+                                            client.inviteIntoGroup(msg.to,[korban[i]])
+                                            client.sendText(msg.to, "Invite"+ cName + "success..")
+                                            break
+                                        del korban[:]
+                                    else :
+                                        client.sendMessage(msg.to, "Belom ada yang ke kick")
                                 except:
                                     client.sendText(msg.to, 'Contact error')
                            
